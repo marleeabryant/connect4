@@ -11,6 +11,8 @@ extern void setHeight(COLUMN *,int h);
 extern int getOpen(COLUMN *);
 extern PIECE *getSpace(COLUMN *this,int row);
 extern void addPieceToCol(COLUMN *this,int row,PIECE *newP);
+extern void removePieceFromCol(COLUMN *this, int row);
 extern void incOpen(COLUMN *this);
+extern void decOpen(COLUMN *this);
 
 #endif

@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include "board.h"
 
-void makePlay(BOARD *this);
+extern int makePlay(BOARD *this);
+extern int makeFirstPlay(BOARD *this);
+extern int makeDefensivePlay(BOARD *this);
+extern int makeOffensivePlay(BOARD *this);
 
 #endif

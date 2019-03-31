@@ -13,9 +13,11 @@ extern void setDims(BOARD *this,int h,int w);
 extern COLUMN *getCol(BOARD *this, int col);
 extern int getPieces(BOARD *this);
 extern void incPieces(BOARD *this);
+extern void decPieces(BOARD *this);
 extern int getHeight(BOARD *this);
 extern int getWidth(BOARD *this);
 extern void addPiece(BOARD *this, int col, char color);
-extern bool checkForWin(BOARD *this, int col);
+extern void removePiece(BOARD *this, int col);
+extern bool checkForSeries(BOARD *this, int col, int series);
 
 #endif

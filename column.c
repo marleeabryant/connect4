@@ -34,6 +34,15 @@ void addPieceToCol(COLUMN *this,int row,PIECE *newP) {
   this->column[row]=newP;
 }
 
+void removePieceFromCol(COLUMN *this,int row) {
+  PIECE *filler=newPIECE();
+  this->column[row]=filler;
+}
+
 void incOpen(COLUMN *this) {
   this->open++;
+}
+
+void decOpen(COLUMN *this) {
+  this->open--;
 }

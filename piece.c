@@ -25,6 +25,7 @@ PIECE *newPIECE() {
   this->southWest=NULL;
   this->west=NULL;
   this->northWest=NULL;
+  this->color='N';
   return this;
 }
 
