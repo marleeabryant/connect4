@@ -4,6 +4,7 @@
 
 struct piece {
   char color;
+  //pointers to all of the spaces around the piece on the board
   PIECE *north;
   PIECE *northEast;
   PIECE *east;
@@ -16,6 +17,14 @@ struct piece {
 
 PIECE *newPIECE() {
   PIECE* this=malloc(sizeof(PIECE));
+  this->north=NULL;
+  this->northEast=NULL;
+  this->east=NULL;
+  this->southEast=NULL;
+  this->south=NULL;
+  this->southWest=NULL;
+  this->west=NULL;
+  this->northWest=NULL;
   return this;
 }
 

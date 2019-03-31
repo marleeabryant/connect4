@@ -5,6 +5,7 @@
 
 struct column {
   int height;
+  //holds the index of the next open space in the column
   int open;
   PIECE **column;
 };

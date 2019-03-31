@@ -9,6 +9,7 @@
 struct board {
   int height;
   int width;
+  //holds a count of the number of pieces in the board
   int pieces;
   COLUMN **board;
 };
@@ -50,13 +51,17 @@ int getWidth(BOARD *this) {
 }
 
 void addPiece(BOARD *this, int col, char color) {
+  //gets the index of the next open space in the given column
   int row=getOpen(getCol(this,col));
+  //makes sure the column is not full
   if(row<this->height) {
     incPieces(this);
     PIECE *newP = newPIECE();
     setColor(newP,color);
     addPieceToCol(getCol(this,col),row,newP);
     incOpen(getCol(this,col));
+    //checks all of the pieces around the new piece to create a graph between
+    //this piece and pieces of the same color
     if(row>0) {
       //check south piece
       if(getColor(getSpace(getCol(this,col),row-1))==getColor(newP)) {
@@ -117,56 +122,63 @@ void addPiece(BOARD *this, int col, char color) {
 }
 
 bool checkForWin(BOARD *this, int col) {
-  int i=2;
-  int j=1;
-  int k=0;
+  int i=0;
   bool winner=false;
-  char thisColor = getColor(getSpace(getCol(this,col),getOpen(getCol(this,col))-1));
-  if(getOpen(getCol(this,col))>=4) {
-    while(i<5 && thisColor==getColor(getSpace(getCol(this,col),getOpen(getCol(this,col))-i)))
-      i++;
-    if(i==5)
-      winner=true;
-  }
-  i=1;
-  while(!winner && i<4 && col-i>=0 && thisColor==getColor(getSpace(getCol(this,col-i),getOpen(getCol(this,col))-1)))
+  //gets the value of the most recently inserted piece
+  PIECE *thisPiece = getSpace(getCol(this,col),getOpen(getCol(this,col))-1);
+  //checks below this piece to look for 4 in a row vertically
+  while(i<3 && getSouth(thisPiece)!=NULL) {
     i++;
-  while(!winner && j<4 && col+j<this->width && thisColor==getColor(getSpace(getCol(this,col+j),getOpen(getCol(this,col))-1)))
-    j++;
-  if(i+j>4)
+    thisPiece=getSouth(thisPiece);
+  }
+  if(i>=3)
     winner=true;
   i=0;
-  j=1;
-  while(!winner && i<3 && j<4 && getOpen(getCol(this,col))+i<this->height && col+j<this->width && thisColor==getColor(getSpace(getCol(this,col+j),getOpen(getCol(this,col))+i))) {
-    k++;
-    j++;
+  thisPiece = getSpace(getCol(this,col),getOpen(getCol(this,col))-1);
+  //checks to the left of the piece
+  while(i<3 && getEast(thisPiece)!=NULL) {
     i++;
+    thisPiece=getEast(thisPiece);
   }
-  i=2;
-  j=1;
-  while(!winner && i<5 && j<4 && getOpen(getCol(this,col))-i>0 && col-j>0 && thisColor==getColor(getSpace(getCol(this,col-j),getOpen(getCol(this,col))-i))) {
-    k++;
+  thisPiece = getSpace(getCol(this,col),getOpen(getCol(this,col))-1);
+  //checks to the right of the piece
+  while(i<3 && getWest(thisPiece)!=NULL) {
     i++;
-    j++;
+    thisPiece=getWest(thisPiece);
   }
-  if(k>1)
+  //if there are enough pieces on the left and right combined, finds a horizontal win
+  if(i>=3)
     winner=true;
-  k=0;
   i=0;
-  j=1;
-  while(!winner && i<3 && j<4 && getOpen(getCol(this,col))+i<this->height && col-j>0 && thisColor==getColor(getSpace(getCol(this,col-j),getOpen(getCol(this,col))+i))) {
-    k++;
+  thisPiece = getSpace(getCol(this,col),getOpen(getCol(this,col))-1);
+  //checks the north east diagonal
+  while(i<3 && getNorthEast(thisPiece)!=NULL) {
     i++;
-    j++;
+    thisPiece=getNorthEast(thisPiece);
   }
-  i=2;
-  j=1;
-  while(!winner && i<5 && j<4 && getOpen(getCol(this,col))-i>0 && col+j<this->width && thisColor==getColor(getSpace(getCol(this,col+j),getOpen(getCol(this,col))-i))) {
-    k++;
+  thisPiece = getSpace(getCol(this,col),getOpen(getCol(this,col))-1);
+  //checks the south west diagonal
+  while(i<3 && getSouthWest(thisPiece)!=NULL) {
     i++;
-    j++;
+    thisPiece=getSouthWest(thisPiece);
   }
-  if(k>1)
+  if(i>=3)
+    winner=true;
+  i=0;
+  thisPiece = getSpace(getCol(this,col),getOpen(getCol(this,col))-1);
+  //checks the north west diagonal
+  while(i<3 && getNorthWest(thisPiece)!=NULL) {
+    i++;
+    thisPiece=getNorthWest(thisPiece);
+  }
+  thisPiece = getSpace(getCol(this,col),getOpen(getCol(this,col))-1);
+  //checks the south east diagonal
+  while(i<3 && getSouthEast(thisPiece)!=NULL) {
+    i++;
+    thisPiece=getSouthEast(thisPiece);
+  }
+  //if the north west and south east have enough pieces combined, finds a diagonal win
+  if(i>=3)
     winner=true;
   return winner;
 }

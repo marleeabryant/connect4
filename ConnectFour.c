@@ -6,6 +6,7 @@
 #include "piece.h"
 #include "column.h"
 #include "board.h"
+#include "player.h"
 
 const int INT_MAX =2147483647;
 
@@ -32,14 +33,15 @@ int main(void) {
   mvprintw(7,col/2,"Input 1 for User v User");
   mvprintw(9,col/2,"Input 2 for User v Computer");
   refresh();
-  mode=(int)getch();
-  while(mode!=49 && mode!=50) {
+  mode=getch();
+  while(mode!='1' && mode!='2') {
     mvprintw(11,col/2,"Error: input a 1 or a 2");
     refresh();
     mode=(int)getch();
   }
-
   while(again) {
+    win=false;
+    full=false;
     attron(A_BOLD);
     mvprintw(13,col/2,"Input board size");
     attroff(A_BOLD);
@@ -108,34 +110,39 @@ int main(void) {
           c=getch();
       }
       if(c=='y') {
-        addPiece(c4,cur/2-1,color);
         int open=getOpen(getCol(c4,cur/2-1));
-        if(open<height-1)
-          mvwaddch(board,height-open+1,cur,color);
-        wrefresh(board);
-        win = checkForWin(c4,cur/2-1);
-        if(win) {
-          if(color=='R')
-            rScore++;
+        if(open<height) {
+          addPiece(c4,cur/2-1,color);
+          mvwaddch(board,width-open,cur,color);
+          wrefresh(board);
+          win = checkForWin(c4,cur/2-1);
+          if(win) {
+            if(color=='R')
+              rScore++;
+            else
+              bScore++;
+            c='x';
+          }
+          else if(getPieces(c4)==getHeight(c4)*getWidth(c4)) {
+             full=true;
+             c='x';
+          }
+          else if(mode=='1') {
+            c=getch();
+            if(color=='R')
+              color='B';
+            else if(color=='B')
+              color='R';
+          }
           else
-            bScore++;
-          c='x';
+            makePlay(c4);
         }
-        else if(getPieces(c4)==getHeight(c4)*getWidth(c4)-1) {
-           full=true;
-        }
-        else {
+        else
           c=getch();
-          if(color=='R')
-            color='B';
-          else if(color=='B')
-            color='R';
-        }
       }
       while(c!='y' && c!='x' && c!='r' && c!='l')
         c=getch();
     }
-  //make case for neither winning
     wclear(board);
     wrefresh(board);
     delwin(board);
