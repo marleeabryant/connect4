@@ -2,7 +2,7 @@
 
 # by Marlee Bryant
 
-# tutorial video link: 
+# tutorial video link: https://youtu.be/x4E6SEzSJX8
 
 # To run the program type "make" into the command line once you are inside the directory
 # After the program compiles without errors (which it should) type "make test" into the command line
