@@ -19,5 +19,6 @@ extern int getWidth(BOARD *this);
 extern void addPiece(BOARD *this, int col, char color);
 extern void removePiece(BOARD *this, int col);
 extern bool checkForSeries(BOARD *this, int col, int series);
+extern void freeBOARD(BOARD *this);
 
 #endif

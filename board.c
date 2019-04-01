@@ -129,8 +129,7 @@ void removePiece(BOARD *this, int col) {
   //gets the index of the next open space in the given column
   int row=getOpen(getCol(this,col))-1;
   char thisColor = getColor(getSpace(getCol(this,col),row));
-  //checks all of the pieces around the new piece to create a graph between
-  //this piece and pieces of the same color
+  //checks all of the pieces around the removed piece to reset their pointers to NULL
   if(row>0) {
     //check south piece
     if(getColor(getSpace(getCol(this,col),row-1))==thisColor)
@@ -171,6 +170,7 @@ void removePiece(BOARD *this, int col) {
     if(getColor(getSpace(getCol(this,col+1),row))==thisColor)
       setWest(getSpace(getCol(this,col+1),row),NULL);
   }
+  //decrements the number of pieces and the next open space and removes the piece
   decPieces(this);
   removePieceFromCol(getCol(this,col),row);
   decOpen(getCol(this,col));
@@ -181,7 +181,7 @@ bool checkForSeries(BOARD *this, int col, int series) {
   bool winner=false;
   //gets the value of the most recently inserted piece
   PIECE *thisPiece = getSpace(getCol(this,col),getOpen(getCol(this,col))-1);
-  //checks below this piece to look for 4 in a row vertically
+  //checks below this piece to look for the value of series in a row vertically
   while(i<series-1 && getSouth(thisPiece)!=NULL) {
     i++;
     thisPiece=getSouth(thisPiece);
@@ -201,7 +201,7 @@ bool checkForSeries(BOARD *this, int col, int series) {
     i++;
     thisPiece=getWest(thisPiece);
   }
-  //if there are enough pieces on the left and right combined, finds a horizontal win
+  //if there are enough pieces on the left and right combined, finds a horizontal series
   if(i>=series-1)
     winner=true;
   i=0;
@@ -232,8 +232,15 @@ bool checkForSeries(BOARD *this, int col, int series) {
     i++;
     thisPiece=getSouthEast(thisPiece);
   }
-  //if the north west and south east have enough pieces combined, finds a diagonal win
+  //if the north west and south east have enough pieces combined, finds a diagonal series
   if(i>=series-1)
     winner=true;
   return winner;
+}
+
+void freeBOARD(BOARD *this) {
+  for(int i=0;i<this->width;i++)
+    freeCOLUMN(this->board[i]);
+  free(this->board);
+  free(this);
 }

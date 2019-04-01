@@ -25,6 +25,7 @@ PIECE *newPIECE() {
   this->southWest=NULL;
   this->west=NULL;
   this->northWest=NULL;
+  //initialized to no color
   this->color='N';
   return this;
 }
@@ -99,4 +100,8 @@ void setWest(PIECE *this, PIECE *that) {
 
 void setNorthWest(PIECE *this, PIECE *that) {
   this->northWest = that;
+}
+
+void freePIECE(PIECE *this) {
+  free(this);
 }

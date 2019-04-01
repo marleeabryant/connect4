@@ -24,6 +24,7 @@ void setSouth(PIECE *this, PIECE *that);
 void setSouthWest(PIECE *this, PIECE *that);
 void setWest(PIECE *this, PIECE *that);
 void setNorthWest(PIECE *this, PIECE *that);
+void freePIECE(PIECE *this);
 
 
 #endif

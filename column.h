@@ -14,5 +14,6 @@ extern void addPieceToCol(COLUMN *this,int row,PIECE *newP);
 extern void removePieceFromCol(COLUMN *this, int row);
 extern void incOpen(COLUMN *this);
 extern void decOpen(COLUMN *this);
+extern void freeCOLUMN(COLUMN *this);
 
 #endif
